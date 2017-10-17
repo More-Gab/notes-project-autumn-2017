@@ -16,8 +16,23 @@ function getControllerActionFromRequest()
     // replace $routes with the variable $routes defined in web.php
     include ROUTES_DIR . '/web.php';
 
+    $current_uri = $_SERVER['REQUEST_URI'];
+
+    // remove '/' from both sides of the uri (turning /foo into just foo)
+    $current_uri = trim($current_uri, '/');
+
+    // get individual parts of the URL
+    $uri_parts = explode('/', $current_uri);
+
     // get the current route from the request or 'homepage' if it is not there
-    $current_route = request('route', 'homepage');
+    if($uri_parts[0] != '')
+    {
+        $current_route = $uri_parts[0];
+    }
+    else
+    {
+        $current_route = 'homepage';
+    }
 
     // if there is an item in $routes with $current_route for index
     if(isset($routes[$current_route]))

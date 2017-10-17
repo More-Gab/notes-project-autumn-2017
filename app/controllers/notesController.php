@@ -10,6 +10,12 @@ class notesController
 {
     public function listing()
     {
+        // demonstration of using URI parts
+        $current_uri = $_SERVER['REQUEST_URI'];
+        $current_uri = trim($current_uri, '/');
+        $uri_parts = explode('/', $current_uri);
+        echo 'Displaying movie ' . $uri_parts[2];
+
         $note = Note::find(1);
 
         $document = new view('document');
