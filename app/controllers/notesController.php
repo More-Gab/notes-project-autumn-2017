@@ -31,16 +31,62 @@ class notesController
 
     public function edit()
     {
-        $note = new \app\Note();
-        $note->title = 'This is my first note';
-        $note->text = 'This is the text of my first note.';
-        $note->added_at = date('Y-m-d H:i:s');
-        $note->insert();
+        // if this is edit
+        if(false) // false because we did not implement edit yet
+        {
+            // retrieve the data to be edited
+            // TODO: retrieve data 
+        }
+        else
+        {
+            // prepare new, empty data for a new record
+            $note = new \app\Note;
+        }
+
+        // was the form submitted?
+        if($_POST)
+        {
+            // update the data with the submitted data
+            $note->title = request('title', null);
+            $note->text = request('text', null);
+            $note->short_summary = request('short_summary', null);
+            
+            $valid = true;
+
+            // check for title filled-in
+            if(!trim($note->title)) // if the title after trimming is ''
+            {
+                $valid = false; // we invalidate the form
+            }
+
+            // check for text filled-in
+            if(!trim($note->text)) // if the text after trimming is ''
+            {
+                $valid = false; // we invalidate the form
+            }
+
+            // is the updated data valid?
+            if($valid)
+            {
+                // save
+                $note->insert();
+
+                // inform the user
+
+                // redirect
+                header('Location: /list');
+                exit();
+            }
+        }
+
+        $edit_form = new view('notes/edit');
+        // pass whatever data fell throught the logic above into the form
+        $edit_form->note = $note;
 
         $document = new view('document');
         
         // "give" the variable $content to the template
-        $document->content = 'Here we will be editting the note';
+        $document->content = $edit_form;
 
         return $document;
     }
